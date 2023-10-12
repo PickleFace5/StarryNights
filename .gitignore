@@ -1,11 +1,3 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
 # idea
 out
 *.ipr
@@ -18,8 +10,9 @@ build
 .gradle
 
 # other
-eclipse
 run
+run-data
+/util/
 
 # Files from Forge MDK
 forge*changelog.txt
