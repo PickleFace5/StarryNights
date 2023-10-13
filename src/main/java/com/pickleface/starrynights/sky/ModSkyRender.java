@@ -99,7 +99,7 @@ public class ModSkyRender {
         RandomSource randomSource = RandomSource.create(ClientConfig.starSeed);
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(ModSkyRender.class.getResourceAsStream("/assets/star/stars.txt"))));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(ModSkyRender.class.getResourceAsStream(ClientConfig.starPath))));
             int successes = 0, fails = 0;
             for (String line; (line = reader.readLine()) != null;) {
                 int id = Integer.parseInt(line.substring(0, StringUtils.ordinalIndexOf(line, ",", 1)));

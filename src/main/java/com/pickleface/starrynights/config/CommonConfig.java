@@ -1,10 +1,10 @@
 package com.pickleface.starrynights.config;
 
+import com.mojang.logging.LogUtils;
 import com.pickleface.starrynights.StarryNights;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod.EventBusSubscriber(modid = StarryNights.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -23,5 +23,6 @@ public class CommonConfig {
     static void onLoad(final FMLCommonSetupEvent event)
     {
         modEnabled = MOD_ENABLED.get();
+        if (!modEnabled) LogUtils.getLogger().warn("Starry Nights has been disabled! If this is accidental, go to the starrynights-commmon.toml config and turn \"modEnabled\" to true.");
     }
 }
