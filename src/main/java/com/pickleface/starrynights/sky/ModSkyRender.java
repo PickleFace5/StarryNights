@@ -48,7 +48,6 @@ public class ModSkyRender {
             if (GameRenderer.getPositionColorShader() == null) return;
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             FogRenderer.setupNoFog();
 
             starBuffer.bind();
@@ -59,14 +58,13 @@ public class ModSkyRender {
             poseStack.pushPose();
             poseStack.mulPose(Axis.XP.rotationDegrees(180));
             poseStack.mulPose(Axis.YP.rotationDegrees(180));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(level.getTimeOfDay(event.getPartialTick()) * 360));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(level.getTimeOfDay(event.getPartialTick()) * 360 + 180));
 
             starBuffer.drawWithShader(event.getPoseStack().last().pose(), event.getProjectionMatrix(), GameRenderer.getPositionColorShader());
             VertexBuffer.unbind();
 
             poseStack.popPose();
 
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.depthMask(true);
@@ -142,7 +140,7 @@ public class ModSkyRender {
                     double d24 = 0.0D * d12 - d21 * d13;
                     double d25 = d24 * d9 - d22 * d10;
                     double d26 = d22 * d9 + d24 * d10;
-                    bufferBuilder.vertex(d5 + d25, d6 + d23, d7 + d26).color(color[0], color[1], color[2], convertMagToAlpha(mag)).endVertex();
+                    bufferBuilder.vertex(d5 + d25, d6 + d23, d7 + d26).color(color[0], color[1], color[2], convertMagToAlpha(mag)/255).endVertex();
                 }
                 successes++;
             }
@@ -159,6 +157,6 @@ public class ModSkyRender {
     }
 
     private static float convertMagToAlpha(float mag) {
-        return (float) (521.686 * Math.pow(mag, -1.20206));
+        return (float) (255 * Math.pow(Math.exp(1), 0.9 * mag));
     }
 }
