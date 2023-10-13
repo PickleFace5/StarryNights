@@ -5,7 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.math.Axis;
+import com.pickleface.starrynights.config.ClientConfig;
 import com.pickleface.starrynights.StarryNights;
+import com.pickleface.starrynights.config.CommonConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
@@ -31,6 +33,8 @@ public class ModSkyRender {
 
     @SubscribeEvent
     public static void renderSky(RenderLevelStageEvent event) {
+        if (!CommonConfig.modEnabled) return;
+
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY) return;
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) return;
@@ -81,18 +85,18 @@ public class ModSkyRender {
         starBuffer.bind();
         starBuffer.upload(drawStars(bufferBuilder));
         VertexBuffer.unbind();
-        LOGGER.info("Created new star buffer");
+        LOGGER.debug("Created new star buffer");
 
         if (levelRenderer.starBuffer != null) {
             levelRenderer.starBuffer.bind();
             levelRenderer.starBuffer.upload(createEmptyBuffer(bufferBuilder));
             VertexBuffer.unbind();
         }
-        LOGGER.info("Replaced vanilla buffer with empty one (this is to avoid openGL from spamming the logs with warnings)");
+        LOGGER.debug("Replaced vanilla buffer with empty one (this is to avoid openGL from spamming the logs with warnings)");
     }
 
     private static BufferBuilder.RenderedBuffer drawStars(BufferBuilder bufferBuilder) {
-        RandomSource randomSource = RandomSource.create(10842L);
+        RandomSource randomSource = RandomSource.create(ClientConfig.starSeed);
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(ModSkyRender.class.getResourceAsStream("/assets/star/stars.txt"))));
